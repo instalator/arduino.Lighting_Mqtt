@@ -5,6 +5,16 @@
 byte mac[]    = { 0x0C, 0x8E, 0x40, 0x41, 0x19, 0x12 };
 byte server[] = { 192, 168, 1, 190 }; //IP Брокера
 byte ip[]     = { 192, 168, 1, 199 }; //IP Клиента (Arduino)
+////////////////////////////////////////////////////////////////////////////
+void callback(char* topic, byte* payload, unsigned int length) {
+    payload[length] = '\0';
+   // Serial.print(topic);
+   // Serial.print("=");
+    String strTopic = String(topic);
+    String strPayload = String((char*)payload);
+   // Serial.println(strPayload);
+    callback_iobroker(strTopic, strPayload);
+}
 
 EthernetClient ethClient;
 PubSubClient client(server, 1883, callback, ethClient);
@@ -12,11 +22,11 @@ PubSubClient client(server, 1883, callback, ethClient);
 #define Prefix_subscribe "myhome/Lighting/"
 
 ///////////////Объявляем порты ввода-вывода
-int posetitel =1;
-const int start_DI_pin []= {22,24,26,28,30,32,34,36,38,40,42,44,46,48,51,52,53}; // Порты Ввода
+
+const int start_DI_pin []= {22,24,26,28,30,32,34,36,38,40,42,44,46,48,51,52,2,3,4,5}; // Порты Ввода
 int n_DI_pin = sizeof(start_DI_pin) / sizeof(start_DI_pin[0])-1; //Вычисляем длинну массива
 
-const int start_DO_pin []= {23,25,27,29,31,33,35,37,39,41,43,45,47,49}; //Порты Вывода
+const int start_DO_pin []= {23,25,27,29,31,33,35,37,39,41,43,45,47,49,6}; //Порты Вывода
 int n_DO_pin = sizeof(start_DO_pin) / sizeof(start_DO_pin[0])-1; //Вычисляем длинну массива
 
 ///////////////////////////Переменные для работы с освещением//////////////////////////////////////
@@ -36,17 +46,13 @@ int n_DO_pin = sizeof(start_DO_pin) / sizeof(start_DO_pin[0])-1; //Вычисл�
   int pre14 = digitalRead(48);
 int flag = 1;
 int pause = 150;
+long previousMillis = 0;
+//long previous2Millis = 0;
+int bathswitch = 0;
+int posetitel = 0;
+int flag_Cupboard = 0;
+//int flag2_Cupboard = 3;
 
-////////////////////////////////////////////////////////////////////////////
-void callback(char* topic, byte* payload, unsigned int length) {
-    payload[length] = '\0';
-   // Serial.print(topic);
-   // Serial.print("=");
-    String strTopic = String(topic);
-    String strPayload = String((char*)payload);
-   // Serial.println(strPayload);
-    callback_iobroker(strTopic, strPayload);
-}
 ////////////////////////////////////////////////////////////////////////////
 void setup() {
   //Serial.begin(57600);
@@ -69,6 +75,7 @@ void setup() {
     client.publish("myhome/Lighting/BathRoom_Main", "0");
     client.publish("myhome/Lighting/BathRoom_Additional", "0");
     client.publish("myhome/Lighting/Hall_Main", "0");
+    client.publish("myhome/Lighting/Cupboard", "0");
     
     client.subscribe("myhome/Lighting/#");
     client.subscribe("myhome/Bathroom/Ventilator");
@@ -95,6 +102,7 @@ void loop() {
           client.publish("myhome/Lighting/BathRoom_Main", "0");
           client.publish("myhome/Lighting/BathRoom_Additional", "0");
           client.publish("myhome/Lighting/Hall_Main", "0");
+          client.publish("myhome/Lighting/Cupboard", "0");
     Button(); //Опрос выключателей
     client.subscribe("myhome/Lighting/#");
     client.subscribe("myhome/Bathroom/Ventilator");
