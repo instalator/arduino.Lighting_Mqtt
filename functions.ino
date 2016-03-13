@@ -1,288 +1,236 @@
 //--------------------------------- Functions ---------------------------------//
 /////////////////////////////////От Брокера//////////////////////////////////////////////
-void callback_iobroker(String strTopic, String strPayload){
+char* ToChar (String intstr){
+    intstr.toCharArray(b, 2);
+    return b;
+  }
+String InvertOut(int pin){
+    delay(pause);
+    digitalWrite(pin, !digitalRead(pin)); //инвертируем состояние пина
+    out = String(digitalRead(pin), DEC);
+    return out;
+}
+ 
+void callback_iobroker(String strTopic, String strPayload) {
+  
   if (strTopic == "myhome/Lighting/BathRoom_Main") {
-    if (strPayload == "0"){
-      digitalWrite(33, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/BathRoom_Main", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(33, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/BathRoom_Main", "1");
-    }
-  } 
-  //////////////////////////
-  if (strTopic == "myhome/Lighting/BedRoom_Main") {
-    if (strPayload == "0") {
-      digitalWrite(23, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/BedRoom_Main", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(23, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/BedRoom_Main", "1");
-    }
-  } 
-  ////////////////////////
-  if (strTopic == "myhome/Lighting/BedRoom_Additional") {
-    if (strPayload == "0") {
-      digitalWrite(25, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/BedRoom_Additional", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(25, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/BedRoom_Additional", "1");
-    }
-  } 
-  ///////////////////////
-  if (strTopic == "myhome/Lighting/Kitchen_Main") {
-    if (strPayload == "0") {
-      digitalWrite(31, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/Kitchen_Main", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(31, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/Kitchen_Main", "1");
-    }
-  } 
-  ///////////////////////
-  if (strTopic == "myhome/Lighting/Kitchen_Additional") {
-    if (strPayload == "0") {
-      digitalWrite(35, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/Kitchen_Additional", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(35, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/Kitchen_Additional", "1");
-    }
-  } 
-  //////////////////////
-  if (strTopic == "myhome/Lighting/Hall_Main") {
-    if (strPayload == "0") {
-      digitalWrite(37, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/Hall_Main", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(37, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/Hall_Main", "1");
-    }
-  } 
-  ///////////////////////
-  if (strTopic == "myhome/Lighting/GuestRoom_Main") {
-    if (strPayload == "0") {
-      digitalWrite(27, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/GuestRoom_Main", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(27, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/GuestRoom_Main", "1");
-    }
-  } 
-  /////////////////////
-  if (strTopic == "myhome/Lighting/GuestRoom_Additional") {
-    if (strPayload == "0") {
-      digitalWrite(29, 0);
-      delay(pause);
-      client.publish("myhome/Lighting/GuestRoom_Additional", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(29, 1);
-      delay(pause);
-      client.publish("myhome/Lighting/GuestRoom_Additional", "1");
-    }
-  } 
-    /////////////////////
-  if (strTopic == "myhome/Bathroom/Ventilator") {
-    if (strPayload == "0") {
-      digitalWrite(49, 0);
-      delay(pause);
-      client.publish("myhome/Bathroom/Ventilator", "0");
-    }
-    else if (strPayload == "1") {
-      digitalWrite(49, 1);
-      delay(pause);
-      client.publish("myhome/Bathroom/Ventilator", "1");
-    }
-  } 
-  ///////////////////
-    if (strTopic == "myhome/Lighting/All_OFF") {
-      if (strPayload == "1") {
-        for(int i=0 ;i<=n_DO_pin; i++) { digitalWrite (start_DO_pin [i], LOW); }
-        delay(pause);
-        client.publish("myhome/Lighting/All_OFF", "OK");
-        client.publish("myhome/Lighting/BedRoom_Main", "0");
-        client.publish("myhome/Lighting/BedRoom_Additional", "0");
-        client.publish("myhome/Lighting/GuestRoom_Main", "0");
-        client.publish("myhome/Lighting/GuestRoom_Additional", "0");
-        client.publish("myhome/Lighting/Kitchen_Main", "0");
-        client.publish("myhome/Lighting/Kitchen_Additional", "0");
-        client.publish("myhome/Lighting/BathRoom_Main", "0");
-        client.publish("myhome/Lighting/BathRoom_Additional", "0");
-        client.publish("myhome/Lighting/Hall_Main", "0");
+      if (strPayload == "0") {
+        posetitel = 0;
+        bathswitch = 0;
       }
+      digitalWrite(33, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/BathRoom_Main", ToChar(strPayload));
+  }
+  //////////////////////////
+  else if (strTopic == "myhome/Lighting/BedRoom_Main") {
+      digitalWrite(23, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/BedRoom_Main", ToChar(strPayload));
     }
+  ////////////////////////
+  else if (strTopic == "myhome/Lighting/BedRoom_Additional") {
+      digitalWrite(25, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/BedRoom_Additional", ToChar(strPayload));
+    }
+  ///////////////////////
+  else if (strTopic == "myhome/Lighting/Kitchen_Main") {
+      digitalWrite(31, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/Kitchen_Main", ToChar(strPayload));
+    }
+  ///////////////////////
+  else if (strTopic == "myhome/Lighting/Kitchen_Additional") {
+      digitalWrite(35, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/Kitchen_Additional", ToChar(strPayload));
+    }
+  //////////////////////
+  else if (strTopic == "myhome/Lighting/Hall_Main") {
+      digitalWrite(43, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/Hall_Main", ToChar(strPayload));
+    }
+  ///////////////////////
+  else if (strTopic == "myhome/Lighting/GuestRoom_Main") {
+      digitalWrite(27, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/GuestRoom_Main", ToChar(strPayload));
+    }
+    ///////////////////////
+  else if (strTopic == "myhome/Lighting/GuestRoom_Main2") {
+      digitalWrite(29, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/GuestRoom_Main2", ToChar(strPayload));
+    }
+  /////////////////////
+  else if (strTopic == "myhome/Lighting/GuestRoom_Additional") {
+      digitalWrite(41, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Lighting/GuestRoom_Additional", ToChar(strPayload));
+    }
+  //////////////////////
+   else if (strTopic == "myhome/Lighting/Lock") {
+      if (strPayload == "1") {
+          Lock = true;
+      } else {
+         posetitel = 1;
+         Lock = false;
+        }
+      delay(pause);
+      client.publish("myhome/Lighting/Lock", ToChar(strPayload));
+    }
+  /////////////////////
+  else if (strTopic == "myhome/Lighting/Cupboard") {
+    if (strPayload == "0") {
+      analogWrite(6, strPayload.toInt());
+     // flag2_Cupboard = 0;
+      client.publish("myhome/Lighting/Cupboard", ToChar(strPayload));
+    }
+    else if (strPayload == "1") {
+      analogWrite(6, 255);
+    //  flag2_Cupboard = 1;
+      client.publish("myhome/Lighting/Cupboard", "1");
+    }
+  }
+  /////////////////////
+  else if (strTopic == "myhome/Bathroom/Ventilator") {
+      digitalWrite(49, strPayload.toInt());
+      delay(pause);
+      client.publish("myhome/Bathroom/Ventilator", ToChar(strPayload));
+    }
+  ///////////////////
+  else if (strTopic == "myhome/Lighting/All_OFF") {
+    if (strPayload == "1") {
+      for (int i = 0 ; i <= n_DO_pin; i++) {
+        digitalWrite (start_DO_pin [i], LOW);
+      }
+      PubTopic();
+      client.publish("myhome/Lighting/All_OFF", "OK");
+      posetitel = 0;
+      bathswitch = 0;
+    }
+  }
 }
 ////////////////////////////////////Брокеру/////////////////////////////////////
-void Button(){
-    char b[2]; 
-/////////////////////////////////////// Ванная ////////////////////////////
-   
-    if (digitalRead(22)!= pre1) {     //если произошло событие
-      delay(pause);
-      digitalWrite(33,!digitalRead(33));//инвертируем состояние пина
-      pre1 = digitalRead(22);
-      int out1 = digitalRead(33);
-      String char_out1 = String(out1);
-      char_out1.toCharArray(b,2);
-      client.publish("myhome/Lighting/BathRoom_Main", b);
-          
-          if (digitalRead(33) == HIGH){
-             posetitel = 1;
-             }
-          else if (digitalRead(33) == LOW)
-            {
-             posetitel = 0;
-             }
-     }
-     else if (digitalRead(53) == 1 && flag == 1){ //Если кто то зашел в ванную то
+void Button() {
+  /////////////////////////////////////// Шкаф ////////////////////////////
+ /* if ((digitalRead(4) == 0 || digitalRead(5) == 0) && flag_Cupboard == 0) { //если произошло событие
+    for (int i = 0; i <= 255; i++) {
+      analogWrite(6, i);
+      delay(10);
+    }
+    client.publish("myhome/Lighting/Cupboard", "1");
+    flag_Cupboard == 1;
+  }
+  if (digitalRead(3) == 1 && digitalRead(4) == 1 && flag_Cupboard == 1) {
+    flag_Cupboard == 0;
+    analogWrite(6, 0);
+    client.publish("myhome/Lighting/Cupboard", "0");
+  }*/
+  /////////////////////////////////////// Ванная ////////////////////////////
+  if (digitalRead(22) != pre1) {    //если произошло событие
+    InvertOut(33);
+    client.publish("myhome/Lighting/BathRoom_Main", ToChar(out));
+    posetitel = digitalRead(33);
+    pre1 = digitalRead(22);
+    bathswitch = posetitel;
+  }
+  
+    if (digitalRead(2) == 1 && (millis() - previousMillis > 3000)) { //Если кто то зашел в ванную то
+      previousMillis = millis();
+      if (bathswitch == 1) {
+        posetitel = 0;
+        bathswitch = 0;
+      }
+      posetitel++;
+      if (posetitel > 0) {
         delay(50);
         digitalWrite(33, 1);//Включаем свет
-        posetitel = 0;
+        if (posetitel > 5) {
+          posetitel = 5;
+        }
+        delay(5);
         client.publish("myhome/Lighting/BathRoom_Main", "1");
-        flag = 0;
-       /* int outq1 = digitalRead(33);
-        String char_outq1 = String(outq1);
-        char_outq1.toCharArray(b,2);
-        
-        client.publish("myhome/Lighting/BathRoom_Main", b);*/
-        //delay(1000);   
-     }
-     else if (digitalRead(53) == 0 && posetitel == 0){
-        delay(50);
-        digitalWrite(33, 0);//Выключам свет
-        posetitel = 1;
-        flag = 1;
-       /* int outw1 = digitalRead(33);
-        String char_outw1 = String(outw1);
-        char_outw1.toCharArray(b,2);
-        delay(1000);
-        client.publish("myhome/Lighting/BathRoom_Main", b);*/
-        client.publish("myhome/Lighting/BathRoom_Main", "0"); 
       }
-/////////////////////////////////////// Спальня 1 ////////////////////////
-     if (digitalRead(24)!= pre2) {     //если произошло событие
-        delay(pause);
-        digitalWrite(23,!digitalRead(23));//инвертируем состояние пина
-        int out2 = digitalRead(23);
-        String char_out2 = String(out2);
-        char_out2.toCharArray(b,2);
-        client.publish("myhome/Lighting/BedRoom_Main", b);
-        pre2 = digitalRead(24);
-     }
-////////////////////////////////////// Спальня 2 ////////////////////////////////////
-    if (digitalRead(26)!= pre3) {     //если произошло событие
-       delay(pause);
-       digitalWrite(25,!digitalRead(25));//инвертируем состояние пина
-       int out3 = digitalRead(25);
-       String char_out3 = String(out3);
-       char_out3.toCharArray(b,2);
-       client.publish("myhome/Lighting/BedRoom_Additional", b);
-       pre3 = digitalRead(26);
-     }
-///////////////////////////////////////// Кухня 1 //////////////////////////////////////
-     if (digitalRead(28)!= pre4) {     //если произошло событие
-       delay(pause);
-       digitalWrite(31,!digitalRead(31));//инвертируем состояние пина
-       int out4 = digitalRead(31);
-       String char_out4 = String(out4);
-       char_out4.toCharArray(b,2);
-       client.publish("myhome/Lighting/Kitchen_Main", b);
-       pre4 = digitalRead(28);
-     }
-///////////////////////////////////////// Кухня 2 //////////////////////////////////////
-     if (digitalRead(30)!= pre5) {     //если произошло событие
-       delay(pause);
-       digitalWrite(35,!digitalRead(35));//инвертируем состояние пина
-       int out5 = digitalRead(35);
-       String char_out5 = String(out5);
-       char_out5.toCharArray(b,2);
-       client.publish("myhome/Lighting/Kitchen_Additional", b);
-       pre5 = digitalRead(30);
-     }
-///////////////////////////////////////// Коридор /////////////////////////////////////
-     if (digitalRead(32)!= pre6) {     //если произошло событие
-       delay(pause);
-       digitalWrite(37,!digitalRead(37));//инвертируем состояние пина
-       int out6 = digitalRead(37);
-       String char_out6 = String(out6);
-       char_out6.toCharArray(b,2);
-       client.publish("myhome/Lighting/Hall_Main", b);
-       pre6 = digitalRead(32);
-     }
-///////////////////////////////////////// Зал лев 1/////////////////////////////////////
-     if (digitalRead(34)!= pre7) {     //если произошло событие
-       delay(pause);
-       digitalWrite(27,!digitalRead(27));//инвертируем состояние пина
-       int out7 = digitalRead(27);
-       String char_out7 = String(out7);
-       char_out7.toCharArray(b,2);
-       client.publish("myhome/Lighting/GuestRoom_Main", b);
-       pre7 = digitalRead(34);
-     }
-///////////////////////////////////////// Зал лев 2 //////////////////////////////////
-     if (digitalRead(36)!= pre8) {     //если произошло событие
-       delay(pause);
-       digitalWrite(29,!digitalRead(29));//инвертируем состояние пина
-       int out8 = digitalRead(29);
-       String char_out8 = String(out8);
-       char_out8.toCharArray(b,2);
-       client.publish("myhome/Lighting/GuestRoom_Additional", b);
-       pre8 = digitalRead(36);
-     }
-////////////////////////////////////////// Зал пр 1 /////////////////////////////
-     if (digitalRead(38)!= pre9) {     //если произошло событие
-       delay(pause);
-       digitalWrite(27,!digitalRead(27));//инвертируем состояние пина
-       int out9 = digitalRead(27);
-       String char_out9 = String(out9);
-       char_out9.toCharArray(b,2);
-       client.publish("myhome/Lighting/GuestRoom_Main", b);
-       pre9 = digitalRead(38);
-     }
-////////////////////////////////////////// Зал пр 2 ///////////////////////////
-     if (digitalRead(40)!= pre10) {     //если произошло событие
-       delay(pause);
-       digitalWrite(29,!digitalRead(29));//инвертируем состояние пина
-       int out10 = digitalRead(29);
-       String char_out10 = String(out10);
-       char_out10.toCharArray(b,2);
-       client.publish("myhome/Lighting/GuestRoom_Additional", b);
-       pre10 = digitalRead(40);
-     }
-  /*   ///////////////////////////// Зал пр 3 //////////////////////////////
-     if (digitalRead(42)!= pre11) {     //если произошло событие
+    }
+    if (digitalRead(3) == 1 && (millis() - previousMillis > 3000) && Lock == false) { //Если кто то вышел из ванной то
+      previousMillis = millis();
+      posetitel--;
+      if (posetitel <= 0) {
+        posetitel = 0;
+        delay(50);
+        digitalWrite(33, 0);//Выключаем свет
+        delay(5);
+        client.publish("myhome/Lighting/BathRoom_Main", "0");
+      }
+    }
+  /////////////////////////////////////// Спальня 1 ////////////////////////
+  if (digitalRead(24) != pre2) {    //если произошло событие
+    InvertOut(23);
+    client.publish("myhome/Lighting/BedRoom_Main", ToChar(out));
+    pre2 = digitalRead(24);
+  }
+  ////////////////////////////////////// Спальня 2 ////////////////////////////////////
+  if (digitalRead(26) != pre3) {    //если произошло событие
+    InvertOut(25);
+    client.publish("myhome/Lighting/BedRoom_Additional", ToChar(out));
+    pre3 = digitalRead(26);
+  }
+  ///////////////////////////////////////// Кухня 1 //////////////////////////////////////
+  if (digitalRead(28) != pre4) {    //если произошло событие
+    InvertOut(31);
+    client.publish("myhome/Lighting/Kitchen_Main", ToChar(out));
+    pre4 = digitalRead(28);
+  }
+  ///////////////////////////////////////// Кухня 2 //////////////////////////////////////
+  if (digitalRead(30) != pre5) {    //если произошло событие
+    InvertOut(35);
+    client.publish("myhome/Lighting/Kitchen_Additional", ToChar(out));
+    pre5 = digitalRead(30);
+  }
+  ///////////////////////////////////////// Коридор /////////////////////////////////////
+  if (digitalRead(32) != pre6) {    //если произошло событие
+    InvertOut(43);
+    client.publish("myhome/Lighting/Hall_Main", ToChar(out));
+    pre6 = digitalRead(32);
+  }
+  ///////////////////////////////////////// Зал лев 1/////////////////////////////////////
+  if (digitalRead(34) != pre7) {    //если произошло событие
+    InvertOut(27);
+    client.publish("myhome/Lighting/GuestRoom_Main", ToChar(out));
+    pre7 = digitalRead(34);
+  }
+  ///////////////////////////////////////// Зал лев 2 //////////////////////////////////
+  if (digitalRead(36) != pre8) {    //если произошло событие
+    InvertOut(29);
+    client.publish("myhome/Lighting/GuestRoom_Main2", ToChar(out));
+    pre8 = digitalRead(36);
+  }
+ ///////////////////////////////////////// Зал лев 3 //////////////////////////////////
+  if (digitalRead(44) != pre12) {    //если произошло событие
+    InvertOut(41);
+    client.publish("myhome/Lighting/GuestRoom_Additional", ToChar(out));
+    pre8 = digitalRead(44);
+  }
+  ////////////////////////////////////////// Зал пр 1 /////////////////////////////
+  if (digitalRead(38) != pre9) {    //если произошло событие
+    InvertOut(27);
+    client.publish("myhome/Lighting/GuestRoom_Main", ToChar(out));
+    pre9 = digitalRead(38);
+  }
+  ////////////////////////////////////////// Зал пр 2 ///////////////////////////
+  if (digitalRead(40) != pre10) {    //если произошло событие
+    InvertOut(29);
+    client.publish("myhome/Lighting/GuestRoom_Main2", ToChar(out));
+    pre10 = digitalRead(40);
+  }
+  /* ///////////////////////////// Зал лев 3 ///////////////////////////////
+     if (digitalRead(43)!= pre12) {     //если произошло событие
         digitalWrite(37,!digitalRead(37));//инвертируем состояние пина
         client.publish("myhome/Lighting/BedRoom_Main", "1");
-        pre11 = digitalRead(42);
-     }
-     ///////////////////////////// Зал лев 3 ///////////////////////////////
-     if (digitalRead(44)!= pre12) {     //если произошло событие
-        digitalWrite(37,!digitalRead(37));//инвертируем состояние пина
-        client.publish("myhome/Lighting/BedRoom_Main", "1");
-        pre12 = digitalRead(44);
+        pre12 = digitalRead(43);
      }
      ///////////////////////////// Ванная 2 ////////////////////////////////////
      if (digitalRead(46)!= pre13) {     //если произошло событие
@@ -298,3 +246,4 @@ void Button(){
      }
      */
 }
+
